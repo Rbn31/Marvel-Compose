@@ -143,9 +143,7 @@ fun ShowCharactersList(
                     }
                     Text(text = description ?: "", maxLines = 4, fontSize = 14.sp)
                 }
-
             }
-
         }
     }
 }

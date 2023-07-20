@@ -74,7 +74,7 @@ fun CharacterDetailScreen(
 
         Text(text = comics, fontStyle = FontStyle.Italic, fontSize = 12.sp, modifier = Modifier.padding(4.dp))
         
-        Text(text = description, fontSize = 16.sp, modifier = Modifier.padding(4.dp))
+        Text(text = description, fontSize = 16.sp, modifier = Modifier.padding(4.dp).fillMaxWidth())
 
         Button(onClick = {
                          if (!inCollection && character != null)
@@ -98,6 +98,5 @@ fun CharacterDetailScreen(
                 }
             }
         }
-
     }
 }
