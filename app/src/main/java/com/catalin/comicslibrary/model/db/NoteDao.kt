@@ -1,19 +1,17 @@
 package com.catalin.comicslibrary.model.db
 
-import androidx.compose.ui.input.pointer.PointerId
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.catalin.comicslibrary.model.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao{
     @Query("SELECT * FROM ${Constants.NOTE_TABLE} ORDER BY id")
-    fun getAlNotes(): Flow<List<DbNote>>
+    fun getAllNotes(): Flow<List<DbNote>>
 
     @Query("SELECT * FROM ${Constants.NOTE_TABLE} WHERE characterId = :characterId ORDER BY id ASC")
     fun getNotes(characterId: Int): Flow<List<DbNote>>

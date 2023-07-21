@@ -32,19 +32,23 @@ import java.util.Set;
 public final class CollectionDb_Impl extends CollectionDb {
   private volatile CharacterDao _characterDao;
 
+  private volatile NoteDao _noteDao;
+
   @Override
   protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration configuration) {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(1) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("CREATE TABLE IF NOT EXISTS `character_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `apiId` INTEGER, `name` TEXT, `thumbnail` TEXT, `comics` TEXT, `description` TEXT)");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `note_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `characterId` INTEGER NOT NULL, `title` TEXT NOT NULL, `text` TEXT NOT NULL)");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '93d6369bec0abdaf3dfae81cfe686da2')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2375d21c495b92670cc9c4307b20f13f')");
       }
 
       @Override
       public void dropAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("DROP TABLE IF EXISTS `character_table`");
+        _db.execSQL("DROP TABLE IF EXISTS `note_table`");
         if (mCallbacks != null) {
           for (int _i = 0, _size = mCallbacks.size(); _i < _size; _i++) {
             mCallbacks.get(_i).onDestructiveMigration(_db);
@@ -99,9 +103,23 @@ public final class CollectionDb_Impl extends CollectionDb {
                   + " Expected:\n" + _infoCharacterTable + "\n"
                   + " Found:\n" + _existingCharacterTable);
         }
+        final HashMap<String, TableInfo.Column> _columnsNoteTable = new HashMap<String, TableInfo.Column>(4);
+        _columnsNoteTable.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsNoteTable.put("characterId", new TableInfo.Column("characterId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsNoteTable.put("title", new TableInfo.Column("title", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsNoteTable.put("text", new TableInfo.Column("text", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysNoteTable = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesNoteTable = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoNoteTable = new TableInfo("note_table", _columnsNoteTable, _foreignKeysNoteTable, _indicesNoteTable);
+        final TableInfo _existingNoteTable = TableInfo.read(_db, "note_table");
+        if (! _infoNoteTable.equals(_existingNoteTable)) {
+          return new RoomOpenHelper.ValidationResult(false, "note_table(com.catalin.comicslibrary.model.db.DbNote).\n"
+                  + " Expected:\n" + _infoNoteTable + "\n"
+                  + " Found:\n" + _existingNoteTable);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "93d6369bec0abdaf3dfae81cfe686da2", "1370bfb352ac55fa21890deea27968a8");
+    }, "2375d21c495b92670cc9c4307b20f13f", "1db329b35593eef4e5c911757e617de2");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)
@@ -114,7 +132,7 @@ public final class CollectionDb_Impl extends CollectionDb {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "character_table");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "character_table","note_table");
   }
 
   @Override
@@ -124,6 +142,7 @@ public final class CollectionDb_Impl extends CollectionDb {
     try {
       super.beginTransaction();
       _db.execSQL("DELETE FROM `character_table`");
+      _db.execSQL("DELETE FROM `note_table`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -138,6 +157,7 @@ public final class CollectionDb_Impl extends CollectionDb {
   protected Map<Class<?>, List<Class<?>>> getRequiredTypeConverters() {
     final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
     _typeConvertersMap.put(CharacterDao.class, CharacterDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(NoteDao.class, NoteDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -163,6 +183,20 @@ public final class CollectionDb_Impl extends CollectionDb {
           _characterDao = new CharacterDao_Impl(this);
         }
         return _characterDao;
+      }
+    }
+  }
+
+  @Override
+  public NoteDao noteDao() {
+    if (_noteDao != null) {
+      return _noteDao;
+    } else {
+      synchronized(this) {
+        if(_noteDao == null) {
+          _noteDao = new NoteDao_Impl(this);
+        }
+        return _noteDao;
       }
     }
   }

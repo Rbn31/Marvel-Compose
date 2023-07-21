@@ -3,6 +3,7 @@ package com.catalin.comicslibrary;
 
 import com.catalin.comicslibrary.model.db.CharacterDao;
 import com.catalin.comicslibrary.model.db.CollectionDbRepo;
+import com.catalin.comicslibrary.model.db.NoteDao;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.Preconditions;
@@ -22,23 +23,27 @@ public final class HiltModule_ProvideDbRepoImplFactory implements Factory<Collec
 
   private final Provider<CharacterDao> characterDaoProvider;
 
+  private final Provider<NoteDao> noteDaoProvider;
+
   public HiltModule_ProvideDbRepoImplFactory(HiltModule module,
-      Provider<CharacterDao> characterDaoProvider) {
+      Provider<CharacterDao> characterDaoProvider, Provider<NoteDao> noteDaoProvider) {
     this.module = module;
     this.characterDaoProvider = characterDaoProvider;
+    this.noteDaoProvider = noteDaoProvider;
   }
 
   @Override
   public CollectionDbRepo get() {
-    return provideDbRepoImpl(module, characterDaoProvider.get());
+    return provideDbRepoImpl(module, characterDaoProvider.get(), noteDaoProvider.get());
   }
 
   public static HiltModule_ProvideDbRepoImplFactory create(HiltModule module,
-      Provider<CharacterDao> characterDaoProvider) {
-    return new HiltModule_ProvideDbRepoImplFactory(module, characterDaoProvider);
+      Provider<CharacterDao> characterDaoProvider, Provider<NoteDao> noteDaoProvider) {
+    return new HiltModule_ProvideDbRepoImplFactory(module, characterDaoProvider, noteDaoProvider);
   }
 
-  public static CollectionDbRepo provideDbRepoImpl(HiltModule instance, CharacterDao characterDao) {
-    return Preconditions.checkNotNullFromProvides(instance.provideDbRepoImpl(characterDao));
+  public static CollectionDbRepo provideDbRepoImpl(HiltModule instance, CharacterDao characterDao,
+      NoteDao noteDao) {
+    return Preconditions.checkNotNullFromProvides(instance.provideDbRepoImpl(characterDao, noteDao));
   }
 }

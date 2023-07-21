@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.catalin.comicslibrary.model.db.CharacterDao;
 import com.catalin.comicslibrary.model.db.CollectionDb;
 import com.catalin.comicslibrary.model.db.CollectionDbRepo;
+import com.catalin.comicslibrary.model.db.NoteDao;
 import com.catalin.comicslibrary.viewmodel.CollectionDbViewModel;
 import com.catalin.comicslibrary.viewmodel.CollectionDbViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.catalin.comicslibrary.viewmodel.LibraryApiViewModel;
@@ -404,8 +405,12 @@ public final class DaggerComicsApplication_HiltComponents_SingletonC {
       return HiltModule_ProvideCharacterDaoFactory.provideCharacterDao(hiltModule, collectionDb());
     }
 
+    private NoteDao noteDao() {
+      return HiltModule_ProvideNoteDaoFactory.provideNoteDao(hiltModule, collectionDb());
+    }
+
     private CollectionDbRepo collectionDbRepo() {
-      return HiltModule_ProvideDbRepoImplFactory.provideDbRepoImpl(hiltModule, characterDao());
+      return HiltModule_ProvideDbRepoImplFactory.provideDbRepoImpl(hiltModule, characterDao(), noteDao());
     }
 
     @SuppressWarnings("unchecked")

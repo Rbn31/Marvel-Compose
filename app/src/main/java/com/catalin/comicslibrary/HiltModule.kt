@@ -9,6 +9,7 @@ import com.catalin.comicslibrary.model.db.CollectionDb
 import com.catalin.comicslibrary.model.db.CollectionDbRepo
 import com.catalin.comicslibrary.model.db.CollectionDbRepoImpl
 import com.catalin.comicslibrary.model.db.Constants.DB
+import com.catalin.comicslibrary.model.db.NoteDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +27,14 @@ class HiltModule {
         Room.databaseBuilder(context, CollectionDb::class.java, DB).build()
 
     @Provides
-    fun provideCharacterDao(collectionDb: CollectionDb) = collectionDb.characterDao()
+    fun provideCharacterDao(collectionDb: CollectionDb) =
+        collectionDb.characterDao()
 
     @Provides
-    fun provideDbRepoImpl(characterDao: CharacterDao): CollectionDbRepo = CollectionDbRepoImpl(characterDao)
+    fun provideNoteDao(collectionDb: CollectionDb) =
+        collectionDb.noteDao()
+
+    @Provides
+    fun provideDbRepoImpl(characterDao: CharacterDao, noteDao: NoteDao): CollectionDbRepo =
+        CollectionDbRepoImpl(characterDao, noteDao)
 }
