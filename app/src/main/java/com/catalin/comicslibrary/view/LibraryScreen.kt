@@ -37,6 +37,8 @@ import com.catalin.comicslibrary.CharacterImage
 import com.catalin.comicslibrary.Destination
 import com.catalin.comicslibrary.model.CharactersApiResponse
 import com.catalin.comicslibrary.model.api.NetworkResult
+import com.catalin.comicslibrary.model.connectivity.ConnectivityMonitor
+import com.catalin.comicslibrary.model.connectivity.ConnectivityObservable
 import com.catalin.comicslibrary.viewmodel.LibraryApiViewModel
 
 @Composable
@@ -47,6 +49,7 @@ fun LibraryScreen(
 ){
     val result by vm.result.collectAsState()
     val text = vm.queryText.collectAsState()
+    val networkAvailable = vm.networkAvailable.observe().collectAsState(ConnectivityObservable.Status.Available)
 
     Column(
         modifier = Modifier
@@ -54,6 +57,21 @@ fun LibraryScreen(
             .padding(bottom = paddingValues.calculateBottomPadding()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        if (networkAvailable.value == ConnectivityObservable.Status.Unavailable){
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Red),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Network Unavailable",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
 
         OutlinedTextField(
             value = text.value,

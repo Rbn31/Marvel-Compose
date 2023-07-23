@@ -2,6 +2,7 @@
 package com.catalin.comicslibrary.viewmodel;
 
 import com.catalin.comicslibrary.model.api.MarvelApiRepo;
+import com.catalin.comicslibrary.model.connectivity.ConnectivityMonitor;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -18,20 +19,26 @@ import javax.inject.Provider;
 public final class LibraryApiViewModel_Factory implements Factory<LibraryApiViewModel> {
   private final Provider<MarvelApiRepo> repoProvider;
 
-  public LibraryApiViewModel_Factory(Provider<MarvelApiRepo> repoProvider) {
+  private final Provider<ConnectivityMonitor> connectivityMonitorProvider;
+
+  public LibraryApiViewModel_Factory(Provider<MarvelApiRepo> repoProvider,
+      Provider<ConnectivityMonitor> connectivityMonitorProvider) {
     this.repoProvider = repoProvider;
+    this.connectivityMonitorProvider = connectivityMonitorProvider;
   }
 
   @Override
   public LibraryApiViewModel get() {
-    return newInstance(repoProvider.get());
+    return newInstance(repoProvider.get(), connectivityMonitorProvider.get());
   }
 
-  public static LibraryApiViewModel_Factory create(Provider<MarvelApiRepo> repoProvider) {
-    return new LibraryApiViewModel_Factory(repoProvider);
+  public static LibraryApiViewModel_Factory create(Provider<MarvelApiRepo> repoProvider,
+      Provider<ConnectivityMonitor> connectivityMonitorProvider) {
+    return new LibraryApiViewModel_Factory(repoProvider, connectivityMonitorProvider);
   }
 
-  public static LibraryApiViewModel newInstance(MarvelApiRepo repo) {
-    return new LibraryApiViewModel(repo);
+  public static LibraryApiViewModel newInstance(MarvelApiRepo repo,
+      ConnectivityMonitor connectivityMonitor) {
+    return new LibraryApiViewModel(repo, connectivityMonitor);
   }
 }

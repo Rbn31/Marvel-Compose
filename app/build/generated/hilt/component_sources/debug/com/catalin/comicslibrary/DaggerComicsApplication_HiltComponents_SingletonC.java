@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
+import com.catalin.comicslibrary.model.connectivity.ConnectivityMonitor;
 import com.catalin.comicslibrary.model.db.CharacterDao;
 import com.catalin.comicslibrary.model.db.CollectionDb;
 import com.catalin.comicslibrary.model.db.CollectionDbRepo;
@@ -413,6 +414,10 @@ public final class DaggerComicsApplication_HiltComponents_SingletonC {
       return HiltModule_ProvideDbRepoImplFactory.provideDbRepoImpl(hiltModule, characterDao(), noteDao());
     }
 
+    private ConnectivityMonitor connectivityMonitor() {
+      return HiltModule_ProvideConnectivityManagerFactory.provideConnectivityManager(hiltModule, ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
+    }
+
     @SuppressWarnings("unchecked")
     private void initialize(final HiltModule hiltModuleParam,
         final SavedStateHandle savedStateHandleParam) {
@@ -450,7 +455,7 @@ public final class DaggerComicsApplication_HiltComponents_SingletonC {
           return (T) new CollectionDbViewModel(viewModelCImpl.collectionDbRepo());
 
           case 1: // com.catalin.comicslibrary.viewmodel.LibraryApiViewModel 
-          return (T) new LibraryApiViewModel(HiltModule_ProvideApiRepoFactory.provideApiRepo(viewModelCImpl.hiltModule));
+          return (T) new LibraryApiViewModel(HiltModule_ProvideApiRepoFactory.provideApiRepo(viewModelCImpl.hiltModule), viewModelCImpl.connectivityMonitor());
 
           default: throw new AssertionError(id);
         }
