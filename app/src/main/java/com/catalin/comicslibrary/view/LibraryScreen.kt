@@ -78,7 +78,7 @@ fun LibraryScreen(
             onValueChange = vm::onQueryupdate,
             label = { Text(text = "Character search")},
             placeholder = { Text(text = "Character")},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Tex
         )
 
         Column(
