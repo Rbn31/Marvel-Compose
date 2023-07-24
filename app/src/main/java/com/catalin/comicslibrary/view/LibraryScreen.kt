@@ -37,7 +37,6 @@ import com.catalin.comicslibrary.CharacterImage
 import com.catalin.comicslibrary.Destination
 import com.catalin.comicslibrary.model.CharactersApiResponse
 import com.catalin.comicslibrary.model.api.NetworkResult
-import com.catalin.comicslibrary.model.connectivity.ConnectivityMonitor
 import com.catalin.comicslibrary.model.connectivity.ConnectivityObservable
 import com.catalin.comicslibrary.viewmodel.LibraryApiViewModel
 
@@ -46,10 +45,11 @@ fun LibraryScreen(
     navController: NavHostController,
     vm: LibraryApiViewModel,
     paddingValues: PaddingValues
-){
+) {
     val result by vm.result.collectAsState()
     val text = vm.queryText.collectAsState()
-    val networkAvailable = vm.networkAvailable.observe().collectAsState(ConnectivityObservable.Status.Available)
+    val networkAvailable =
+        vm.networkAvailable.observe().collectAsState(ConnectivityObservable.Status.Available)
 
     Column(
         modifier = Modifier
@@ -58,10 +58,11 @@ fun LibraryScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        if (networkAvailable.value == ConnectivityObservable.Status.Unavailable){
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Red),
+        if (networkAvailable.value == ConnectivityObservable.Status.Unavailable) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Red),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -76,9 +77,11 @@ fun LibraryScreen(
         OutlinedTextField(
             value = text.value,
             onValueChange = vm::onQueryupdate,
-            label = { Text(text = "Character search")},
-            placeholder = { Text(text = "Character")},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Tex
+            label = { Text(text = "Character search") },
+            placeholder = { Text(text = "Character") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            )
         )
 
         Column(
@@ -86,13 +89,16 @@ fun LibraryScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            when(result){
+            when (result) {
                 is NetworkResult.Initial -> {
                     Text(text = "Search for a character")
                 }
 
                 is NetworkResult.Success -> {
-                    ShowCharactersList(result as NetworkResult.Success<CharactersApiResponse>, navController)
+                    ShowCharactersList(
+                        result as NetworkResult.Success<CharactersApiResponse>,
+                        navController
+                    )
                 }
 
                 is NetworkResult.Loading -> {
@@ -116,14 +122,14 @@ fun ShowCharactersList(
         LazyColumn(
             modifier = Modifier.background(Color.LightGray),
             verticalArrangement = Arrangement.Top
-        ){
-            result.data.attributionText?.let{
-                item{
+        ) {
+            result.data.attributionText?.let {
+                item {
                     AttributionText(text = it)
                 }
             }
 
-            items(characters){character ->
+            items(characters) { character ->
                 val imageUrl = character.thumbnail?.path + "." + character.thumbnail?.extension
                 val title = character.name
                 val description = character.description
