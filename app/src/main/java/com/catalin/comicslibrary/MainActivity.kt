@@ -13,6 +13,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,13 +29,11 @@ import com.catalin.comicslibrary.viewmodel.LibraryApiViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 sealed class Destination(val route: String) {
-
     object Library : Destination("library")
     object Collection : Destination("collection")
     object CharacterDetail : Destination("character/{characterId}") {
         fun createRoute(characterId: Int?) = "character/$characterId"
     }
-
 }
 
 @AndroidEntryPoint

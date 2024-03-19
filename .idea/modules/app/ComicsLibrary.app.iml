@@ -2,8 +2,15 @@
 <module version="4">
   <component name="ModuleClassLoaderOverlays">
     <paths>
+<<<<<<< HEAD
       <option value="C:\Users\Robson\AppData\Local\Temp\overlay12863796329916672809" />
       <option value="C:\Users\Robson\AppData\Local\Temp\overlay4654219583191032577" />
+=======
+      <option value="/var/folders/n9/5fl36cj92njgxjwpzyq8m_zw0000gn/T/overlay17176494479893352188" />
+      <option value="/var/folders/n9/5fl36cj92njgxjwpzyq8m_zw0000gn/T/overlay7130617453988993099" />
+      <option value="/var/folders/n9/5fl36cj92njgxjwpzyq8m_zw0000gn/T/overlay14973289023899043646" />
+      <option value="/var/folders/n9/5fl36cj92njgxjwpzyq8m_zw0000gn/T/overlay13454608778839665197" />
+>>>>>>> 88e4a347c070b6b8a9ffa6e57d9b22211ddfdab0
     </paths>
   </component>
 </module>

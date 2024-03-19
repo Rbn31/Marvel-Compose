@@ -41,6 +41,7 @@ import com.catalin.comicslibrary.model.connectivity.ConnectivityObservable
 import com.catalin.comicslibrary.viewmodel.LibraryApiViewModel
 
 @Composable
+
 fun LibraryScreen(
     navController: NavHostController,
     vm: LibraryApiViewModel,
